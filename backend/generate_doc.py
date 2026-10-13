@@ -4,7 +4,8 @@ import os
 import zipfile
 import re
 import tempfile
-from docx2pdf import convert
+import subprocess
+import shutil
 
 def format_date(date_str):
     if not date_str:
