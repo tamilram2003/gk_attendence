@@ -53,8 +53,8 @@ def generate_word_document(template_path, output_path, data):
 
         # 1. Update Date
         date_pattern = re.compile(
-            r'(<w:t[^>]*>Date:<\/w:t>[\s\S]*?<w:t[^>]*>__<\/w:t>)'
-            r'(?:[\s\S]*?<w:t[^>]*>10<\/w:t>[\s\S]*?<w:t[^>]*>\.<\/w:t>[\s\S]*?<w:t[^>]*>10<\/w:t>[\s\S]*?<w:t[^>]*>\.<\/w:t>[\s\S]*?<w:t[^>]*>202<\/w:t>[\s\S]*?<w:t[^>]*>6<\/w:t>)'
+            r'(<w:t[^>]*>Date:<\/w:t>[\s\S]*?<w:t[^>]*>__<\/w:t><\/w:r>)'
+            r'(?:[\s\S]*?<w:t[^>]*>10<\/w:t>[\s\S]*?<w:t[^>]*>\.<\/w:t>[\s\S]*?<w:t[^>]*>10<\/w:t>[\s\S]*?<w:t[^>]*>\.<\/w:t>[\s\S]*?<w:t[^>]*>202<\/w:t>[\s\S]*?<w:t[^>]*>6<\/w:t><\/w:r>)'
             r'([\s\S]*?<w:t[^>]*>___<\/w:t>)'
         )
         xml_content = date_pattern.sub(
@@ -114,11 +114,16 @@ def convert_to_pdf_cross_platform(docx_path, pdf_path):
         cmd = [
             soffice_cmd,
             '--headless',
-            '--convert-to', 'pdf',
+            '--invisible',
+            '--nodefault',
+            '--nofirststartwizard',
+            '--nolockcheck',
+            '--nologo',
+            '--convert-to', 'pdf:writer_pdf_Export',
             '--outdir', out_dir,
             os.path.abspath(docx_path)
         ]
-        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
         # LibreOffice outputs <basename>.pdf in out_dir
         expected_pdf = os.path.join(out_dir, os.path.splitext(os.path.basename(docx_path))[0] + '.pdf')
         if os.path.exists(expected_pdf) and expected_pdf != os.path.abspath(pdf_path):

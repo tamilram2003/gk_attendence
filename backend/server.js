@@ -77,7 +77,7 @@ function updateDocumentXml(xmlContent, { formattedDate, vehicleNumber, formatted
 
   // 1. DATE: Paragraph 2 contains Date: __10.10.2026___
   // Matches Date: __ and the 10.10.2026 runs followed by ___
-  const dateRegex = /(<w:t[^>]*>Date:<\/w:t>[\s\S]*?<w:t[^>]*>__<\/w:t>)(?:[\s\S]*?<w:t[^>]*>10<\/w:t>[\s\S]*?<w:t[^>]*>\.<\/w:t>[\s\S]*?<w:t[^>]*>10<\/w:t>[\s\S]*?<w:t[^>]*>\.<\/w:t>[\s\S]*?<w:t[^>]*>202<\/w:t>[\s\S]*?<w:t[^>]*>6<\/w:t>)([\s\S]*?<w:t[^>]*>___<\/w:t>)/;
+  const dateRegex = /(<w:t[^>]*>Date:<\/w:t>[\s\S]*?<w:t[^>]*>__<\/w:t><\/w:r>)(?:[\s\S]*?<w:t[^>]*>10<\/w:t>[\s\S]*?<w:t[^>]*>\.<\/w:t>[\s\S]*?<w:t[^>]*>10<\/w:t>[\s\S]*?<w:t[^>]*>\.<\/w:t>[\s\S]*?<w:t[^>]*>202<\/w:t>[\s\S]*?<w:t[^>]*>6<\/w:t><\/w:r>)([\s\S]*?<w:t[^>]*>___<\/w:t>)/;
   if (dateRegex.test(updatedXml)) {
     updatedXml = updatedXml.replace(dateRegex, (match, p1, p2) => {
       return `${p1}<w:r><w:rPr><w:rFonts w:ascii="Calibri" w:eastAsia="Times New Roman" w:hAnsi="Calibri" w:cs="Calibri"/><w:color w:val="000000"/><w:lang w:eastAsia="en-AE"/></w:rPr><w:t>${safeDate}</w:t></w:r>${p2}`;

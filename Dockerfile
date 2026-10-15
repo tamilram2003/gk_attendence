@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libreoffice-writer \
     fonts-liberation \
     fonts-dejavu \
+    fonts-freefont-ttf \
+    fontconfig \
+    && fc-cache -f \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
